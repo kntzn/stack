@@ -81,7 +81,7 @@ inline Stack<dataType>::Stack (arrln Size, bool resizeable, bool debug)
         if (debug_output)
             printf ("Failed to init stack:\n\tFailed to allocate memory\n");
     else if (debug_output)
-            printf ("Successfully allocated %d bytes\n", len * sizeof (dataType));
+            printf ("Successfully allocated %d bytes\n", unsigned long long int (len * sizeof (dataType)));
 
     // Memory poisoning
     for (int i = 0; i < len; i++)
