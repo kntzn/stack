@@ -5,11 +5,16 @@ int main ()
     {    
     Stack <int> stk (10);
    
+    printf ("%d\n", stk.size ());
+    printf ("%d\n", stk.empty ());
 
     for (int i = 0; i < 12; i++)
+        {
         stk.push (2);
-    for (int i = 0; i < 12; i++)
-        stk.pop ();
+        //printf ("%d\n", stk.size ());
+        }
+    
+    printf ("%d\n", stk.empty ());
 
     stk.top () = 3;
     

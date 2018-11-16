@@ -20,6 +20,8 @@ template <typename dataType> class Stack
         bool push (dataType value);
         bool pop ();
 
+        arrln size ();
+        bool empty ();
     };
 
 
@@ -91,4 +93,16 @@ inline bool Stack<dataType>::pop ()
     currentLen--;
 
     return true;
+    }
+
+template<typename dataType>
+inline arrln Stack<dataType>::size ()
+    {
+    return currentLen;
+    }
+
+template<typename dataType>
+inline bool Stack<dataType>::empty ()
+    {
+    return (currentLen == 0);
     }
