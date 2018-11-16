@@ -8,7 +8,7 @@ typedef unsigned long long int arrln;
 template <typename dataType> class Stack
     {
     private:
-        bool extendable;
+        bool extendable, debug_output;
         arrln len, currentLen;
         dataType* container;
         
@@ -16,7 +16,7 @@ template <typename dataType> class Stack
 
     public:
         // Constructor and destructor
-        Stack (arrln Size = STK_SZ_DEFAULT, bool resizeable = false);
+        Stack (arrln Size = STK_SZ_DEFAULT, bool resizeable = false, bool debug = true);
         ~Stack ();
 
         // Getters
@@ -26,7 +26,6 @@ template <typename dataType> class Stack
         bool push (dataType value);
         bool pop ();
         bool shrink_to_fit ();
-
 
         // Size getters
         arrln size ();
@@ -60,12 +59,16 @@ inline bool Stack<dataType>::extend ()
     }
 
 template<typename dataType>
-inline Stack<dataType>::Stack (arrln Size, bool resizeable)
+inline Stack<dataType>::Stack (arrln Size, bool resizeable, bool debug)
     {
     extendable = resizeable;
     len = Size;
     currentLen = 0;
+    debug_output = debug;
 
+    if (debug_output)
+        printf ("Stk debug enabled\n");
+    
     if (len == 0)
         {
         printf ("Failed to init stack:\n\tStack size must be greater than zero\n");
@@ -75,9 +78,10 @@ inline Stack<dataType>::Stack (arrln Size, bool resizeable)
     // Memory allocation
     container = (dataType*) calloc (len, sizeof (dataType));
     if (container == nullptr)
-        printf ("Failed to init stack:\n\tFailed to allocate memory\n");
-    else
-        printf ("Successfully allocated %d bytes\n", len*sizeof (dataType));
+        if (debug_output)
+            printf ("Failed to init stack:\n\tFailed to allocate memory\n");
+    else if (debug_output)
+            printf ("Successfully allocated %d bytes\n", len * sizeof (dataType));
 
     // Memory poisoning
     for (int i = 0; i < len; i++)
@@ -95,7 +99,8 @@ inline dataType & Stack<dataType>::top ()
     {
     if (currentLen == 0)
         {
-        printf ("Failed to top ():\n\tStack is empty\n");
+        if (debug_output)
+            printf ("Failed to top ():\n\tStack is empty\n");
 
         // Weired
         int exeption_trigger = 1 / (currentLen);
@@ -111,7 +116,8 @@ inline bool Stack<dataType>::push (dataType value)
         {
         if (!extendable)
             {
-            printf ("Failed to push ():\n\tStack is full\n");
+            if (debug_output)
+                printf ("Failed to push ():\n\tStack is full\n");
             return false;
             }
         else
@@ -129,7 +135,8 @@ inline bool Stack<dataType>::pop ()
     {
     if (currentLen == 0)
         {
-        printf ("Failed to pop ():\n\tStack is empty\n");
+        if (debug_output)
+            printf ("Failed to pop ():\n\tStack is empty\n");
         return false;
         }
 
@@ -157,7 +164,7 @@ inline bool Stack<dataType>::shrink_to_fit ()
 
         return true;
         }
-    else
+    else if (debug_output)
         printf ("Failed to shrink stack:\n\tFailed to allocate memory\n");
 
     return false;
