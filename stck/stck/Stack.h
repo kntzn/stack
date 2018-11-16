@@ -11,13 +11,15 @@ template <typename dataType> class Stack
         bool extendable;
         arrln len, currentLen;
         dataType* container;
-
+        
     public:
-        Stack (arrln Size = STK_SZ_DEFAULT, bool resizeable = true);
+        Stack (arrln Size = STK_SZ_DEFAULT, bool resizeable = false);
 
         dataType & top ();
 
         bool push (dataType value);
+        bool pop ();
+
     };
 
 
@@ -41,6 +43,10 @@ inline Stack<dataType>::Stack (arrln Size, bool resizeable)
         printf ("Failed to init stack:\n\tFailed to allocate memory\n");
     else
         printf ("Successfully allocated %d bytes\n", len*sizeof (dataType));
+
+    // Memory poisoning
+    for (int i = 0; i < len; i++)
+        container [i] = STK_POISON;
     }
 
 template<typename dataType>
@@ -49,16 +55,18 @@ inline dataType & Stack<dataType>::top ()
     if (currentLen == 0)
         {
         printf ("Failed to top ():\n\tStack is empty\n");
-        return container [0];
-        }
 
-    return container [currentLen-1];
+        // Weired
+        int exeption_trigger = 1 / (currentLen);
+        }
+    else
+        return container [currentLen - 1];
     }
 
 template<typename dataType>
 inline bool Stack<dataType>::push (dataType value)
     {
-    if (currentLen >= len && extendable)
+    if (currentLen >= len && !extendable)
         {
         printf ("Failed to push ():\n\tStack is full\n");
         return false;
@@ -66,6 +74,21 @@ inline bool Stack<dataType>::push (dataType value)
     
     container [currentLen] = value;
     currentLen++;
+
+    return true;
+    }
+
+template<typename dataType>
+inline bool Stack<dataType>::pop ()
+    {
+    if (currentLen == 0)
+        {
+        printf ("Failed to pop ():\n\tStack is empty\n");
+        return false;
+        }
+
+    container [currentLen-1] = STK_POISON;
+    currentLen--;
 
     return true;
     }
