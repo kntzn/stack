@@ -12,19 +12,50 @@ template <typename dataType> class Stack
         arrln len, currentLen;
         dataType* container;
         
-    public:
-        Stack (arrln Size = STK_SZ_DEFAULT, bool resizeable = false);
+        bool extend ();
 
+    public:
+        // Constructor and destructor
+        Stack (arrln Size = STK_SZ_DEFAULT, bool resizeable = false);
+        ~Stack ();
+
+        // Getters
         dataType & top ();
 
+        // Modifiers
         bool push (dataType value);
         bool pop ();
 
+        // Size getters
         arrln size ();
         bool empty ();
     };
 
 
+
+template<typename dataType>
+inline bool Stack<dataType>::extend ()
+    {
+    // Memory allocation
+    dataType* newContainer = (dataType*) calloc (2*len, sizeof (dataType));
+    if (newContainer != nullptr)
+        {
+        for (int i = 0; i < len; i++)
+            newContainer [i] = container [i];
+
+        free (container);
+
+        container = newContainer;
+        
+        len *= 2;
+
+        return true;
+        }
+    else
+        printf ("Failed to extend stack:\n\tFailed to allocate memory\n");
+
+    return false;
+    }
 
 template<typename dataType>
 inline Stack<dataType>::Stack (arrln Size, bool resizeable)
@@ -52,6 +83,12 @@ inline Stack<dataType>::Stack (arrln Size, bool resizeable)
     }
 
 template<typename dataType>
+inline Stack<dataType>::~Stack ()
+    {
+    free (container);
+    }
+
+template<typename dataType>
 inline dataType & Stack<dataType>::top ()
     {
     if (currentLen == 0)
@@ -68,12 +105,17 @@ inline dataType & Stack<dataType>::top ()
 template<typename dataType>
 inline bool Stack<dataType>::push (dataType value)
     {
-    if (currentLen >= len && !extendable)
+    if (currentLen >= len)
         {
-        printf ("Failed to push ():\n\tStack is full\n");
-        return false;
+        if (!extendable)
+            {
+            printf ("Failed to push ():\n\tStack is full\n");
+            return false;
+            }
+        else
+            extend ();
         }
-    
+
     container [currentLen] = value;
     currentLen++;
 
@@ -98,6 +140,9 @@ inline bool Stack<dataType>::pop ()
 template<typename dataType>
 inline arrln Stack<dataType>::size ()
     {
+
+    printf (" cl: %d\n", currentLen);
+
     return currentLen;
     }
 

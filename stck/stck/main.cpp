@@ -1,24 +1,21 @@
 #include <stdlib.h>
 #include "Stack.h"
+#include <stack>
 
 int main ()
     {    
-    Stack <int> stk (10);
+    Stack <int> stk (5, true);
    
-    printf ("%d\n", stk.size ());
-    printf ("%d\n", stk.empty ());
+    for (int i = 0; i < 10; i++)
+        stk.push (i);
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 10; i++)
         {
-        stk.push (2);
-        //printf ("%d\n", stk.size ());
+        printf ("%d\n", stk.top ());
+        stk.pop ();
         }
+    //std::stack <int> std_stk;
     
-    printf ("%d\n", stk.empty ());
-
-    stk.top () = 3;
-    
-    printf ("%d\n", stk.top ());
 
     // TODO:
     
