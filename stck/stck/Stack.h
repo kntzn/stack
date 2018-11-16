@@ -25,6 +25,8 @@ template <typename dataType> class Stack
         // Modifiers
         bool push (dataType value);
         bool pop ();
+        bool shrink_to_fit ();
+
 
         // Size getters
         arrln size ();
@@ -138,11 +140,32 @@ inline bool Stack<dataType>::pop ()
     }
 
 template<typename dataType>
+inline bool Stack<dataType>::shrink_to_fit ()
+    {
+    // Memory allocation
+    dataType* newContainer = (dataType*) calloc (currentLen, sizeof (dataType));
+    if (newContainer != nullptr)
+        {
+        for (int i = 0; i < currentLen; i++)
+            newContainer [i] = container [i];
+
+        free (container);
+
+        container = newContainer;
+
+        len = currentLen;
+
+        return true;
+        }
+    else
+        printf ("Failed to shrink stack:\n\tFailed to allocate memory\n");
+
+    return false;
+    }
+
+template<typename dataType>
 inline arrln Stack<dataType>::size ()
     {
-
-    printf (" cl: %d\n", currentLen);
-
     return currentLen;
     }
 

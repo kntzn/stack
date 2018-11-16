@@ -1,19 +1,16 @@
 #include <stdlib.h>
 #include "Stack.h"
-#include <stack>
 
 int main ()
     {    
     Stack <int> stk (5, true);
    
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 7; i++)
         stk.push (i);
+    
+    stk.shrink_to_fit ();
 
-    for (int i = 0; i < 10; i++)
-        {
-        printf ("%d\n", stk.top ());
-        stk.pop ();
-        }
+    printf ("%d\n", stk.size ());
     //std::stack <int> std_stk;
     
 
