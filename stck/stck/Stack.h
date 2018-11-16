@@ -3,6 +3,7 @@
 
 typedef unsigned long long int arrln;
 #define STK_SZ_DEFAULT 1000
+#define STK_POISON 557
 
 template <typename dataType> class Stack
     {
@@ -15,6 +16,8 @@ template <typename dataType> class Stack
         Stack (arrln Size = STK_SZ_DEFAULT, bool resizeable = true);
 
         dataType & top ();
+
+        bool push (dataType value);
     };
 
 
@@ -50,4 +53,19 @@ inline dataType & Stack<dataType>::top ()
         }
 
     return container [currentLen-1];
+    }
+
+template<typename dataType>
+inline bool Stack<dataType>::push (dataType value)
+    {
+    if (currentLen >= len && extendable)
+        {
+        printf ("Failed to push ():\n\tStack is full\n");
+        return false;
+        }
+    
+    container [currentLen] = value;
+    currentLen++;
+
+    return true;
     }
