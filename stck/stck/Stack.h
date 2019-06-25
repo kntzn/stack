@@ -102,8 +102,7 @@ inline dataType & Stack<dataType>::top ()
         if (debug_output)
             printf ("Failed to top ():\n\tStack is empty\n");
 
-        // Weired
-        int exeption_trigger = 1 / (currentLen);
+        return STK_POISON;
         }
     else
         return container [currentLen - 1];
